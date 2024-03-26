@@ -31,6 +31,7 @@ export class DatePayloadService {
   }
 
   private numberToSpanish(n: number): string {
+    // desglose de numero (unidades, decenas, centenas y cientos)
     const units = [
       'cero',
       'uno',
