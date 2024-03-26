@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgresconfi:
+    image: postgres
+    hostname: ${HOST_NAME}
+    container_name: postgresconfi
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql
+  
+
+  pgadminconfig:
+    image: dpage/pgadmin4
+    container_name: pgadminconfig
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${DB_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DB_EMAIL_PASSWORD}
+    ports:
+      - "5050:80"
