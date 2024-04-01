@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { validate as isUUID } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
@@ -14,9 +15,15 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
-    const newUser = this.userRepository.create(createUserDto);
-    await this.userRepository.save(newUser);
-    return newUser;
+    const saltOrRounds = 10;
+    const salt = await bcrypt.genSalt(saltOrRounds);
+    const hash = await bcrypt.hash(createUserDto.password, salt);
+    const user = this.userRepository.create({
+      ...createUserDto,
+      password: hash,
+    });
+    await this.userRepository.save(user);
+    return user;
   }
 
   async getUsers() {
